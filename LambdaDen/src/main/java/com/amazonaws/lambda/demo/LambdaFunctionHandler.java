@@ -5,6 +5,9 @@ import com.amazonaws.services.lambda.runtime.RequestHandler;
 
 public class LambdaFunctionHandler implements RequestHandler<String, String> {
 
+	/**
+	 * handles request
+	 */
     public String handleRequest(String input, Context context) {
         context.getLogger().log("LambdaFunctionHandler Input: " + input);
 
