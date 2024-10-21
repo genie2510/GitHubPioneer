@@ -1,4 +1,4 @@
-package com.lambda.tutorials;
+package com.tutorials.lambda;
 
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicReference;
