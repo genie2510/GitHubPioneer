@@ -1,5 +1,5 @@
 server:
-  port: 8901
+  port: 9099
 spring:
   application:
     name: config-server
@@ -16,4 +16,4 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8001/eureka/
+      defaultZone: http://localhost:8671/eureka/
