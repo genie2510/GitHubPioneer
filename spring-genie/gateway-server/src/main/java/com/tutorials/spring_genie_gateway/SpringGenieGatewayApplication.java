@@ -15,8 +15,19 @@ public class SpringGenieGatewayApplication {
 		SpringApplication.run(SpringGenieGatewayApplication.class, args);
 	}
 
+	/*
+	 * @Bean public RouteLocator myRoutes(RouteLocatorBuilder builder) { return
+	 * builder.routes().build(); }
+	 */
+
 	@Bean
 	public RouteLocator myRoutes(RouteLocatorBuilder builder) {
-	    return builder.routes().build();
+		return builder.routes()
+		         .route(p -> p
+		            .path("/**")
+		            .filters(f -> f.addRequestHeader("Src", "Tutorialspoint"))
+		            .uri("http://localhost:8088/"))
+		            .build();
 	}
+
 }

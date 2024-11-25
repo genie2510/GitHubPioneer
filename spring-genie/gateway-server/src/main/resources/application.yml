@@ -3,18 +3,20 @@ server:
 spring:
   application:
     name: gateway-server
-  cloud:
-    gateway:
-      routes:
-        - id: after_route
-          uri: https://example.org
-          predicates:
-          - name: Cookie
-            args:
-              name: mycookie
-              regexp: mycookievalue	
+#  cloud:
+#    gateway:
+#      routes:
+#        - id: after_route
+#          uri: https://example.org
+#          predicates:
+#          - name: Cookie
+#            args:
+#              name: mycookie
+#              regexp: mycookievalue	
 
 eureka:
   client:
+    register-with-eureka: false #注册到Eureka的注册中心
+    fetch-registry: false
     service-url:
       defaultZone: http://localhost:8671/eureka/
