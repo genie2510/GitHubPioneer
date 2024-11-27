@@ -3,20 +3,28 @@ server:
 spring:
   application:
     name: gateway-server
-#  cloud:
-#    gateway:
-#      routes:
-#        - id: after_route
-#          uri: https://example.org
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://RaviR-Dev:8088
+          predicates:
+          #- Method=GET
+          #- Header=Authorization, Bearer [0-9a-zA-Z-.]*
+          - Path=/eureka-user-service/**
+#        - id: customer-service
+#          uri: http://RaviR-Dev:8089
 #          predicates:
-#          - name: Cookie
-#            args:
-#              name: mycookie
-#              regexp: mycookievalue	
+#          - Path=/customer-service/**
 
 eureka:
   client:
-    register-with-eureka: false #注册到Eureka的注册中心
-    fetch-registry: false
-    service-url:
-      defaultZone: http://localhost:8671/eureka/
+   register-with-eureka: false #注册到Eureka的注册中心
+   fetch-registry: false #获取注册实例列表
+   service-url:
+      defaultZone: http://RaviR-Dev:8671/eureka/
+
+logging: 
+  level:
+   root: debug 
+    
