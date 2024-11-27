@@ -6,18 +6,18 @@ package com.macro.cloud.domain;
  * @date 2023/11/30
  * @github https://github.com/macrozheng
  */
-public class User {
+public class Product {
 
     private Long id;
-    private String username;
+    private String productname;
     private String password;
 
-    public User() {
+    public Product() {
     }
 
-    public User(Long id, String username, String password) {
+    public Product(Long id, String productname, String password) {
         this.id = id;
-        this.username = username;
+        this.productname = productname;
         this.password = password;
     }
 
@@ -30,11 +30,11 @@ public class User {
     }
 
     public String getUsername() {
-        return username;
+        return productname;
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.productname = username;
     }
 
     public String getPassword() {

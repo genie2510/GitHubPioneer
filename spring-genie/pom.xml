@@ -91,9 +91,9 @@
 
 	<modules>
 		<module>eureka-server</module>
-		<module>eureka-user-service</module>
 		<module>config-server</module>
 		<module>gateway-server</module>
 		<module>customer-service</module>
+		<module>product-service</module>
 	</modules>
 </project>

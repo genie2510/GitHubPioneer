@@ -6,12 +6,12 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: user-service
+        - id: product-service
           uri: http://RaviR-Dev:8088
           predicates:
           #- Method=GET
           #- Header=Authorization, Bearer [0-9a-zA-Z-.]*
-          - Path=/eureka-user-service/**
+          - Path=/product-service/**
 #        - id: customer-service
 #          uri: http://RaviR-Dev:8089
 #          predicates:
