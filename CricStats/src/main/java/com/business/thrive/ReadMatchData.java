@@ -12,7 +12,9 @@ import java.util.List;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -55,7 +57,8 @@ public class ReadMatchData {
             String team1 = teamKeys.hasNext() ? teamKeys.next() : "Team 1";
             String team2 = teamKeys.hasNext() ? teamKeys.next() : "Team 2";
 
-            createExcel(team1+"vs"+team2);
+            excelFilePath = ExcelOperations.createExcel(team1+"vs"+team2);
+            
             JSONObject team1Summary = teams.getJSONObject(team1);
             JSONObject team2Summary = teams.getJSONObject(team2);
 
@@ -67,8 +70,8 @@ public class ReadMatchData {
             System.out.println("Result: " + result + "\n");
 
             // Extract innings data dynamically (passing both teams)
-            printInningsData(data, team1, team2);
-            printInningsData(data, team2, team1);
+            //printInningsData(data, team1, team2);
+            //printInningsData(data, team2, team1);
 
             List<PlayerInfo> team1Players = getPlayers(data, team1);
             List<PlayerInfo> team2Players = getPlayers(data, team2);
@@ -77,7 +80,9 @@ public class ReadMatchData {
             if (result.toLowerCase().contains(team1.toLowerCase())) winner = team1;
             else if (result.toLowerCase().contains(team2.toLowerCase())) winner = team2;
 
-            writeToExcel(team1, team1Players, team2, team2Players, winner);
+            ExcelOperations.createExcelTab(capitalize(team1), excelFilePath);
+            ExcelOperations.createExcelTab(capitalize(team2), excelFilePath);
+            //writeToExcel(team1, team1Players, team2, team2Players, winner);
 
         } catch (IOException e) {
             System.err.println("Error reading the file: " + e.fillInStackTrace());
@@ -113,7 +118,7 @@ public class ReadMatchData {
         return players;
     }
 
-    private static void writeToExcel(String team1, List<PlayerInfo> team1Players, String team2, List<PlayerInfo> team2Players, String winner) {
+    /*private static void writeToExcel(String team1, List<PlayerInfo> team1Players, String team2, List<PlayerInfo> team2Players, String winner) {
         File file = new File(excelFilePath);
         
         try (Workbook workbook = file.exists() ? new XSSFWorkbook(new FileInputStream(file)) : new XSSFWorkbook()) {
@@ -123,14 +128,14 @@ public class ReadMatchData {
             if (sheet1 == null) {
                 sheet1 = workbook.createSheet(capitalizedTeam1);
             }
-            writePlayersToSheet(workbook, sheet1, team1Players, winner);
+            //writePlayersToSheet(workbook, sheet1, team1Players, winner);
 
             String capitalizedTeam2 = capitalize(team2);
             Sheet sheet2 = workbook.getSheet(capitalizedTeam2);
             if (sheet2 == null) {
                 sheet2 = workbook.createSheet(capitalizedTeam2);
             }
-            writePlayersToSheet(workbook, sheet2, team2Players, winner);
+            //writePlayersToSheet(workbook, sheet2, team2Players, winner);
 
             try (FileOutputStream fos = new FileOutputStream(file)) {
                 workbook.write(fos);
@@ -140,16 +145,19 @@ public class ReadMatchData {
         } catch (Exception e) {
             System.err.println("Error writing to Excel: " + e.getMessage());
         }
-    }
+    }*/
 
-    private static void writePlayersToSheet(Workbook workbook, Sheet sheet, List<PlayerInfo> players, String winner) {
+    /*private static void writePlayersToSheet(Workbook workbook, Sheet sheet, List<PlayerInfo> players, String winner) {
         CellStyle headerStyle = workbook.createCellStyle();
         Font headerFont = workbook.createFont();
         headerFont.setBold(true);
         headerStyle.setFont(headerFont);
+        headerStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
-        Row header = sheet.createRow(0);
-        Cell headerCell = header.createCell(0);
+        sheet.createRow(0);
+        Row header = sheet.createRow(1);
+        Cell headerCell = header.createCell(1);
         headerCell.setCellValue("Won  " + capitalize(winner));
         headerCell.setCellStyle(headerStyle);
         
@@ -169,7 +177,7 @@ public class ReadMatchData {
                 }
             }
         }
-    }
+    }*/
 
 	private static void printInningsData(JSONObject data, String battingTeam, String bowlingTeam) throws Exception{
         System.out.println("=== " + capitalize(battingTeam) + " Innings ===");
@@ -240,25 +248,11 @@ public class ReadMatchData {
         System.out.println();
     }
 
-    private static String capitalize(String str) {
+	public static String capitalize(String str) {
         if (str == null || str.isEmpty()) {
             return str;
         }
         return str.substring(0, 1).toUpperCase() + str.substring(1).toLowerCase();
     }
     
-    private static void createExcel(String series) {
-
-        String filePath = "src/main/resources/"+series+".xlsx";
-        excelFilePath = filePath;
-        File file = new File(filePath);
-
-        if (file.exists()) {
-            System.out.println("Excel file already exists at: " + filePath);
-        } else {
-            System.out.println("Creating new Excel file: " + filePath);
-        }
-    
-    }
-
 }
