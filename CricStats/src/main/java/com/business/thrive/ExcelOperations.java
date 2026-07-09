@@ -32,7 +32,7 @@ public class ExcelOperations {
 		return filePath;
 	}
 
-	public static void writeToExcel(Sheet sheet, List<PlayerInfo> teamPlayers, boolean isTabExist) {
+	public static void writeToExcel(Sheet sheet, List<PlayerInfo> teamPlayers, boolean isTabExist, String total) {
 		int rowIdx = 1;
 
 		if(isTabExist) {
@@ -59,7 +59,7 @@ public class ExcelOperations {
 					}
 				}
 			}	
-		}else {	
+		}else {
 			for (PlayerInfo p : teamPlayers) {
 				Row row = sheet.createRow(rowIdx++);
 				
@@ -76,10 +76,15 @@ public class ExcelOperations {
 					}
 				}
 			}
-		}		
+		}	
+		
+		Row totalRow = sheet.getRow(17);
+		Cell totalCell = totalRow.createCell(1);
+		//totalCell.setCellStyle(totalStyle);
+		totalCell.setCellValue(total);
 	}
 
-	public static Workbook createExcelTab(String team, String excelFilePath, List<PlayerInfo> teamPlayers) {
+	public static Workbook createExcelTab(String team, String excelFilePath, List<PlayerInfo> teamPlayers, String total) {
 		File file = new File(excelFilePath);
 		Workbook excelSheet = null;
 		boolean isTabExist = false;
@@ -109,12 +114,25 @@ public class ExcelOperations {
 					}
 					cell.setCellStyle(headerStyle);
 				}
+				
+				Font totalFont = excelSheet.createFont();
+				CellStyle totalStyle = excelSheet.createCellStyle();
+				totalFont.setBold(true);
+				totalFont.setColor(IndexedColors.BROWN.getIndex());
+				totalStyle.setFont(totalFont);
+				totalStyle.setFillForegroundColor(IndexedColors.BROWN.getIndex());
+				//totalStyle.setFillPattern(FillPatternType.ALT_BARS);
+				
+				Row totalRow = tab.createRow(17);
+				Cell totalCell = totalRow.createCell(0);
+				totalCell.setCellStyle(totalStyle);
+				totalCell.setCellValue("Total");
 				System.out.println("Created new Tab for team : " + team);
 			} else {
 				System.out.println("Tab already exist for team : " + team);
 				isTabExist = true;
 			}
-			writeToExcel(tab,teamPlayers,isTabExist);
+			writeToExcel(tab,teamPlayers,isTabExist, total);
 			try (FileOutputStream fos = new FileOutputStream(file)) {
 				excelSheet.write(fos);
 			}

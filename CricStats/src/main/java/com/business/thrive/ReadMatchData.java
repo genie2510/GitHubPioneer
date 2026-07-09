@@ -29,7 +29,7 @@ public class ReadMatchData {
 	public static void main(String[] args) {
 
 		System.out.println("ReadMatchDataReadMatchData business");
-		String filePath = "src/main/resources/match_data.json";
+		String filePath = "src/main/resources/match_data1.json";
 		readJson(filePath);
 	}
 
@@ -75,8 +75,18 @@ public class ReadMatchData {
 			else if (result.toLowerCase().contains(team2.toLowerCase()))
 				winner = team2;
 
-			Workbook excelSheet = ExcelOperations.createExcelTab(capitalize(team1), excelFilePath, team1Players);
-			excelSheet  		= ExcelOperations.createExcelTab(capitalize(team2), excelFilePath, team2Players);
+			String team1InningsKey = team1 + "_innings";
+			JSONObject team1Innings = data.getJSONObject(team1InningsKey);
+			JSONObject team1Total = team1Innings.getJSONObject("total");
+			
+			String team2InningsKey = team2 + "_innings";
+			JSONObject team2Innings = data.getJSONObject(team2InningsKey);
+			JSONObject team2Total = team2Innings.getJSONObject("total");
+			
+			System.out.println("team1Total  "+team1Total.getInt("runs")+"/"+team1Total.getInt("wickets"));
+			System.out.println("team2Total  "+team2Total.getInt("runs")+"/"+team2Total.getInt("wickets"));
+			Workbook excelSheet = ExcelOperations.createExcelTab(capitalize(team1), excelFilePath, team1Players, team1Total.getInt("runs")+"/"+team1Total.getInt("wickets"));
+			excelSheet  		= ExcelOperations.createExcelTab(capitalize(team2), excelFilePath, team2Players, team2Total.getInt("runs")+"/"+team2Total.getInt("wickets"));
 			
 			//ExcelOperations.writeToExcel(capitalize(team1), team1Players, excelSheet);
 			// writeToExcel(team1, team1Players, team2, team2Players, winner);
